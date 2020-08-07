@@ -1,6 +1,25 @@
-<html>
-  <head> </head>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
   <body>
-    <h1>Hello</h1>
+    <p id="hello"></p>
+    <a href="quiz.ejs">Start quiz</a>
+
+    <script>
+      fetch('http://localhost:3000/users')
+        .then((res) => res.json()) // SAME: .then((res) => return res.json())
+        .then((data) => {
+          const users = data.arr;
+          let html = '';
+          for (let user of users) {
+            html += '<p>' + user.name + '</p>';
+          }
+          document.getElementById('hello').innerHTML = html;
+        });
+    </script>
   </body>
 </html>
