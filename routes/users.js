@@ -22,6 +22,7 @@ router.get('/', async (req, res, next) => {
     ]);
     const results2 = data2[0];
 
+    connection.release();
     res.json({ status: 200, arr: results2 });
   } catch (err) {
     console.log(err);
@@ -49,6 +50,7 @@ router.post('/', async (req, res, next) => {
       'INSERT INTO USER(name, money, email, hashed_pwd, salt) VALUES(?, ?, ?, ?, ?)',
       [name, money, email, hashedPwd, salt]
     );
+    connection.release();
     res.json({ status: 201, msg: 'Success!' });
   } catch (err) {
     console.log(err);
@@ -68,6 +70,8 @@ router.post('/login', async (req, res, next) => {
       'SELECT * FROM USER WHERE email = ?',
       [email]
     );
+
+    connection.release();
     if (users.length === 0) {
       return res.json({ status: 404, msg: 'not a registered email' });
     }
@@ -109,6 +113,8 @@ router.get('/:id/profile', async (req, res, next) => {
       const [
         results,
       ] = await connection.query('SELECT * FROM USER WHERE id = ?', [id]);
+
+      connection.release();
       res.json({ status: 200, arr: results });
     } catch (err) {
       console.log(err);
